@@ -1,0 +1,15 @@
+class QuickMenu {
+
+  constructor(page){
+    this.page = page
+    this.menuButton = page.locator('div:has(button[title="Help"]) > button').first()
+  }
+
+  async open(){
+    await this.menuButton.click()
+    await this.page.getByText('פעולות מהירות').waitFor()
+  }
+
+}
+
+module.exports = { QuickMenu }

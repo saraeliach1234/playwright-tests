@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+  <meta charset="UTF-8" />
+  <title
+
+</title>
+</head>
+<body>
+
+<h1>חשבונית</h1>
+
+<label>סכום חשבונית:</label>
+<span data-testid="invoice-total">1000</span>
+
+<br><br>
+
+<label>ניכוי:</label>
+<input data-testid="deduction-amount" type="number" />
+
+<button data-testid="save-deduction"
+  onclick="
+    const d = document.querySelector('[data-testid=deduction-amount]').value;
+    document.querySelector('[data-testid=deduction-value]').innerText = d;
+  ">
+  שמור
+</button>
+
+<p>ניכוי שבוצע: <span data-testid="deduction-value">0</span></p>
+
+</body>
+</html>

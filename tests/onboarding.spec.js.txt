@@ -1,0 +1,57 @@
+const { test, expect } = require('@playwright/test');
+const { LoginPage } = require('../pages/loginPage');
+
+test('Login flow', async ({ page }) => {
+  const loginPage = new LoginPage(page);
+
+  await loginPage.goto();
+ await loginPage.setupOtpHandler();
+  await loginPage.goto();
+  await loginPage.login('+972 52 711 6967', '240220262');
+
+
+  await expect(page).toHaveURL(/dashboard/);
+
+  const continueButton = page.locator('[data-test-id="kyc-missing-continue"]');
+
+await expect(continueButton).toBeVisible();
+await continueButton.click();
+
+const startButton = page.getByRole('button', { name: 'התחל רישום' });
+
+await startButton.waitFor({ state: 'visible' });
+await startButton.click();
+await expect(page.getByText('שם ספק').locator('..').locator('input')).toHaveValue('שרה טסט8');
+//ח.פ ספק
+await expect(page.getByText('ח.פ ספק').locator('..').locator('input')).toHaveValue('240220262');
+
+await expect(page.getByText('כתובת רחוב')
+  .locator('..')
+  .locator('input')
+).toHaveValue('הרצל 10');
+
+await expect(page.getByText('עיר').locator('..').locator('input')).toHaveValue('תל אביב');
+await expect(page.getByText('מיקוד').locator('..').locator('input')).toHaveValue('6100000');
+//מספר בנק
+await expect(page.getByText('מספר בנק').locator('..').locator('input')).toHaveValue('12');
+await expect(page.getByText('מספר סניף').locator('..').locator('input')).toHaveValue('888');
+//await expect(page.getByText('מספר חשבון בנק').locator('..').locator('input')).toHaveValue('333444');
+await expect(
+  page.getByText('מספר חשבון בנק')
+    .locator('..')
+    .locator('input')
+).toHaveValue(/\d{6,}/);
+//פרטי איש קשר
+await expect(page.getByText('שם פרטי איש קשר').locator('..').locator('input')).toHaveValue('שרה');
+await expect(page.getByText('שם משפחה איש קשר').locator('..').locator('input')).toHaveValue('אליאך');
+await expect(page.getByText('טלפון איש קשר').locator('..').locator('input')).toHaveValue('+972527116967');
+await expect(page.getByText('אימייל איש קשר').locator('..').locator('input')).toHaveValue('e3105270@gmail.com');
+await expect(
+  page.locator('input[type="checkbox"]').first()
+).toBeChecked();
+await page.getByRole('button', { name: 'המשך לשלב הבא' }).click();
+await page.getByRole('button', { name: 'התחל אימות' }).click();
+await page.getByRole('button', { name: 'המשך' }).click();
+ await page.pause(); // מצוין לניטור התוצאות בסיום
+});
+
