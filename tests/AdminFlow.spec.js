@@ -62,7 +62,9 @@ test('Approve supplier test 2', async ({ page }) => {
   
  await loginPage.setupOtpHandler();
   await loginPage.goto();
-  await loginPage.login('+972 52 711 6967', '240220261');
+   const phone = process.env.USER_PHONE;
+  const password = process.env.USER_PASS;
+  await loginPage.login(phone, password);
 
 await suppliersPage.goto();
 await suppliersPage.approveSupplierForOnboarding();

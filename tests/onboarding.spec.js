@@ -7,11 +7,12 @@ const path = require('path');
 
 test('onboarding test 1 flow', async ({ page }) => {
   const loginPage = new LoginPage(page);
-
+ const phone = process.env.USER_PHONE;
+  const password = process.env.USER_PASS_SUP;
   await loginPage.goto();
  await loginPage.setupOtpHandler();
   await loginPage.goto();
-  await loginPage.login('+972 52 711 6967', '240220262');
+  await loginPage.login(phone, password);
 
 
   await expect(page).toHaveURL(/dashboard/);

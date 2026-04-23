@@ -9,7 +9,7 @@ class InvoicesPage {
      // this.menuButton = this.page.getByTestId('invoices-menu');
   }
 async getInvoiceData() {
-    const filePath = path.resolve(__dirname, '../data/testData.json');
+    const filePath = path.resolve(__dirname, '../data/invoiceData.json');
     return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
   }
 

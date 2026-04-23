@@ -1,0 +1,121 @@
+const { expect } = require('@playwright/test')
+
+class SuppliersPage {
+
+  constructor(page) {
+    this.page = page
+  }
+
+  async goto() {
+
+    await this.page.goto('https://dashboard.upcapital.io/crafted/widgets/Suppliers')
+
+    await expect(this.page).toHaveURL(/Suppliers/)
+
+    console.log('הגענו לעמוד הספקים בהצלחה!')
+
+    await this.page.waitForSelector('table', { state: 'visible' })
+
+  }
+
+  async downloadExcel() {
+
+     // מחכה שהעמוד יפסיק לשלוח בקשות רשת
+    await this.page.waitForLoadState('networkidle');
+
+    const downloadPromise = this.page.waitForEvent('download')
+
+     await this.page.getByRole('button', { name: 'הורדת Excel' }).waitFor();
+
+    await this.page.getByRole('button', { name: 'הורדת Excel' }).click();
+
+    const download = await downloadPromise
+
+    const path = './downloads/Suppliers.xlsx'
+
+    await download.saveAs(path)
+
+    console.log('קובץ Excel ירד בהצלחה')
+
+  }
+
+  async uploadExcel(filePath) {
+
+    const fileChooserPromise = this.page.waitForEvent('filechooser')
+
+    await this.page.getByText('ספקים מקובץ Excel').click()
+
+    const fileChooser = await fileChooserPromise
+
+    await fileChooser.setFiles(filePath)
+
+    console.log('הקובץ נבחר')
+
+    const uploadButton = this.page.getByRole('button', { name: 'Upload Excel' })
+
+    await uploadButton.click()
+
+    await this.page.waitForLoadState('networkidle')
+
+    console.log('תוכן הקובץ הועלה לטבלה')
+
+  }
+
+  async createSupplier() {
+
+    const createSupplierButton = this.page.getByText('CREATE.SUPPLIER')
+
+    await createSupplierButton.click()
+
+    console.log('לחצתי על CREATE.SUPPLIER')
+
+    await this.page.getByPlaceholder('Enter supplier Company Name').fill('חברה חדשה טסט בע"מ')
+
+    await this.page.getByPlaceholder('Enter Company ID').fill('511223344')
+
+    await this.page.locator('#WHT_DeductionPercent').fill('0')
+
+    await this.page.locator('#WHT_DeductionDate').fill('2026-12-31')
+
+    await this.page.getByRole('button', { name: 'Next' }).click()
+
+  }
+
+  async approveSupplier() {
+
+    const supplierRow = this.page.locator('tr', { hasText: 'ספק שרה טסט' })
+
+    await supplierRow.locator('input[type="checkbox"]').check()
+
+    await expect(supplierRow.locator('input[type="checkbox"]')).toBeChecked()
+
+    console.log('הספק סומן בהצלחה')
+
+    const approveBtn = this.page.getByRole('link', { name: 'אישור' })
+
+    await approveBtn.click()
+
+    console.log('לחצתי על אישור')
+
+  }
+
+  async rejectSupplier(){
+
+    const supplierRow = this.page.locator('tr', { hasText: 'טסט' }).first()
+
+    await supplierRow.locator('input[type="checkbox"]').check()
+
+    await expect(supplierRow.locator('input[type="checkbox"]')).toBeChecked()
+
+    console.log('הספק סומן בהצלחה')
+
+    const rejectBtn = this.page.getByRole('link', { name: 'דחה' });
+ 
+    await rejectBtn.click();
+    
+    console.log('לחצתי על כפתור דחה');
+  }
+
+}
+
+module.exports = { SuppliersPage }

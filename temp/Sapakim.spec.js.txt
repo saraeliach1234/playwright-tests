@@ -1,0 +1,109 @@
+const { test, expect } = require('@playwright/test');
+const { redirect } = require('next/dist/server/api-utils');
+
+
+test('ניווט לספקים ', async ({ page }) => {
+await page.waitForSelector('table', { state: 'visible' });
+// --- שלב א': פתיחת התפריט ---
+// אנחנו משתמשים בעוגן של כפתור ה-Help כדי למצוא את ה-3 נקודות שלידו
+//redirect(res, 'C:\Users\User\tests\tests\test1.spec.js');
+// הפניה לדף אחר בתוך הטסט
+// 1. פתיחת התפריט הצף (לחיצה על שלוש הנקודות)
+const quickMenu1 = page.locator('div:has(button[title="Help"]) > button').first();
+await quickMenu1.click();
+await page.waitForSelector('text=פעולות מהירות', { state: 'visible' });
+console.log('התפריט נפתח!');
+// --- שלב ב': הגדרת ההורדה (חייב להופיע לפני הלחיצה!) ---
+// כאן אנחנו "מחלקים" את האחריות: קודם כל מכינים מאזין (Listener)
+const downloadPromise = page.waitForEvent('download');
+// --- שלב ג': ביצוע הלחיצה ושמירה ---
+await page.getByText('הורדת Excel').click(); // לחיצה על האופציה מהתפריט
+const download = await downloadPromise; // המתנה לסיום
+const supplierName = 'Sara_Test'; // הגדרת המשתנה כדי שלא תהיה שגיאה
+const path = `./downloads/Suppliers_${supplierName}.xlsx`;
+
+await download.saveAs(path); // שמירה פיזית בתיקייה שחילקנו מראש
+
+
+// 1. פתיחת התפריט הצף (לחיצה על שלוש הנקודות)
+const quickMenu2 = page.locator('div:has(button[title="Help"]) > button').first();
+await quickMenu2.click();
+
+// 2. המתנה שהתפריט יופיע על המסך
+await page.waitForSelector('text=פעולות מהירות', { state: 'visible' });
+
+// 3. הכנת המאזין לדיאלוג בחירת הקובץ (חובה לפני הלחיצה)
+// ברגע שנלחץ על הכפתור, הדפדפן יפתח את חלון בחירת הקבצים של Windows
+const fileChooserPromise = page.waitForEvent('filechooser');
+
+// 4. לחיצה על האופציה "ספקים מקובץ Excel"
+await page.getByText('ספקים מקובץ Excel').click();
+
+// 5. המתנה לדיאלוג והעלאת הקובץ מהמחשב שלך
+const fileChooser = await fileChooserPromise;
+await fileChooser.setFiles('C:/Users/User/Downloads/suppliers (1).xlsx'); // כאן יש לשים נתיב לקובץ אמיתי
+
+console.log('הקובץ נבחר והועלה בהצלחה!');
+
+// 2. לחיצה על כפתור ה-Upload הסופי שמופיע במסך
+// לפי התמונה, הכפתור כחול וכתוב עליו "Upload Excel"
+const uploadButton = page.getByRole('button', { name: 'Upload Excel' });
+await uploadButton.click();
+// 3. המתנה שהנתונים יתעדכנו בטבלה
+// נחפש טקסט שמעיד על הצלחה או שהטבלה נטענה מחדש
+await page.waitForLoadState('networkidle');
+console.log('תוכן הקובץ הועלה לטבלה בהצלחה!');
+
+// 1. פתיחת התפריט הצף (לחיצה על כפתור שלוש הנקודות ליד ה-Help)
+const quickMenu3 = page.locator('div:has(button[title="Help"]) > button').first();
+await quickMenu3.click();
+
+// 2. המתנה שהתפריט יוצג ויזואלית
+await page.waitForSelector('text=פעולות מהירות', { state: 'visible' });
+
+// 3. לחיצה על האופציה השלישית בתפריט: "CREATE.SUPPLIER"
+// אנחנו משתמשים ב-getByText כדי לוודא שאנחנו לוחצים על הפעולה הנכונה
+
+const createSupplierButton = page.getByText('CREATE.SUPPLIER');
+await createSupplierButton.click();
+
+console.log('לחצתי על CREATE.SUPPLIER!');
+
+// 1. הזנת שם החברה (Company Name)
+await page.getByPlaceholder('Enter supplier Company Name').fill('חברה חדשה טסט בע"מ');
+
+// 2. הזנת ח.פ / ת.ז (Company ID)
+await page.getByPlaceholder('Enter Company ID').fill('511223344');
+
+// 2. תיקון: הזנת אחוז ניכוי מס (שימוש ב-ID הייחודי של השדה)
+await page.locator('#WHT_DeductionPercent').fill('0');
+
+// 3. תיקון: הזנת תאריך ניכוי מס (שימוש ב-ID הייחודי של שדה התאריך)
+await page.locator('#WHT_DeductionDate').fill('2026-12-31');
+
+// 4. לחיצה על Next
+await page.getByRole('button', { name: 'Next' }).click();
+
+// אפשרות א': הכי פשוט ויציב - חיפוש לפי הטקסט הגלוי
+//await page.getByText('חברה חדשה טסט בע"מ').click();
+
+// 1. מציאת השורה (row) שמכילה את שם הספק החדש
+const supplierRow = page.locator('tr', { hasText: 'ספק שרה טסט' });
+
+// 2. סימון הצ'ק-בוקס בתוך אותה שורה
+// בדרך כלל בטבלאות האלו הצ'ק-בוקס הוא מסוג input[type="checkbox"]
+await supplierRow.locator('input[type="checkbox"]').check();
+
+// 3. בדיקה (Assertion) שהצ'ק-בוקס אכן מסומן
+await expect(supplierRow.locator('input[type="checkbox"]')).toBeChecked();
+
+console.log('הספק ספק שרה טסט סומן בהצלחה!');
+
+// --- לחילופין, ללחיצה על דחה ---
+
+ const rejectBtn = page.getByRole('link', { name: 'דחה' });
+ await rejectBtn.click();
+ console.log('לחצתי על כפתור דחה');
+
+await page.pause();
+});

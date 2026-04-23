@@ -3,6 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const XLSX = require('xlsx');
 
+
 class SuppliersPage {
   constructor(page) {
     this.page = page;
@@ -36,23 +37,45 @@ class SuppliersPage {
     return filePath; 
   }
  
-
-async wrightToExell(filePath) {
-
-  const jsonPath = path.resolve(__dirname, '../data/supplierData.json');
-  const data = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
-
-  const wb = XLSX.readFile(filePath);
-  const ws = wb.Sheets[wb.SheetNames[0]];
-
-  Object.entries(data).forEach(([cell, value]) => {
-    ws[cell] = { t: 's', v: value };
-  });
-
-  XLSX.writeFile(wb, filePath);
-
-
+async getSupplierData() {
+    const filePath = path.resolve(__dirname, '../data/supplierData.json');
+    return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
   }
+
+  async writeToExell(filePath) {
+
+    const data = await this.getSupplierData();
+
+    // טוענים את האקסל
+    const wb = XLSX.readFile(filePath);
+    const ws = wb.Sheets[wb.SheetNames[0]];
+
+    // מיפוי מסודר (לא Object.values!)
+    const cellsMap = [
+      data.Name,
+      data.WHT_Identifier,
+      data.WHT_DeductionPercent,
+      data.WHT_DeductionDate,
+      data.Contact_FirstName,
+      data.Contact_LastName,
+      data.Contact_PhoneNumber,
+      data.Contact_Email,
+      data.Bank_Name,
+      data.Bank_AccountNumber,
+      data.Bank_BranchNumber
+    ];
+
+    const cells = ['A2','B2','C2','D2','E2','F2','G2','H2','I2','J2','K2'];
+
+    cells.forEach((cell, i) => {
+      ws[cell] = { t: 's', v: cellsMap[i] };
+      
+    });
+
+    XLSX.writeFile(wb, filePath);
+    return cellsMap[0];
+  }
+ 
   async uploadExcel(filePath) {
     if (!filePath) throw new Error("Missing filePath for upload");
 
@@ -73,7 +96,9 @@ async wrightToExell(filePath) {
     console.log('תוכן הקובץ הועלה לטבלה');
   }
 
-  async createSupplier() {
+  /*async createSupplier() {
+    const jsonPath = path.resolve(__dirname, '../data/supplierData.json');
+  const data = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
     await this.page.getByText('CREATE.SUPPLIER').click();
     await this.page.getByPlaceholder('Enter supplier Company Name').fill('חברה חדשה טסט בע"מ');
     await this.page.getByPlaceholder('Enter Company ID').fill('511223344');
@@ -81,30 +106,22 @@ async wrightToExell(filePath) {
     await this.page.locator('#WHT_DeductionDate').fill('2026-12-31');
     await this.page.getByRole('button', { name: 'Next' }).click();
     console.log('ספק חדש נוצר');
-  }
+  }*/
 
-  async approveSupplier() {
-    const supplierRow = this.page.locator('tr', { hasText:' שרה טסט ד' });
+  async approveSupplier(myData) {
+    console.log(myData);
+    const supplierRow = this.page.locator('tr', { hasText:myData });
     await supplierRow.locator('input[type="checkbox"]').check();
     await this.page.getByRole('link', { name: 'אישור' }).click();
     console.log('לחצתי על אישור ספק');
   }
 
-   async approveSupplierForOnboarding() {
-    const supplierRow = this.page.locator('tr', { hasText:'11שרה טסט' });
-    await supplierRow.locator('input[type="checkbox"]').check();
-    await this.page.getByRole('link', { name: 'אישור' }).click();
-    console.log('לחצתי על אישור ספק');
-  }
-
-
-
-  async rejectSupplier() {
+ /* async rejectSupplier() {
     const supplierRow = this.page.locator('tr', { hasText: 'טסט' }).first();
     await supplierRow.locator('input[type="checkbox"]').check();
     await this.page.getByRole('link', { name: 'דחה' }).click();
     console.log('לחצתי על דחיית ספק');
-  }
+  }*/
 }
 
 module.exports = { SuppliersPage };

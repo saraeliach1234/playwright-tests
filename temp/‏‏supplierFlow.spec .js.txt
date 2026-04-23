@@ -1,0 +1,44 @@
+const { test, devices } = require('@playwright/test')
+
+const { LoginPage } = require('../pages/loginPage')
+const { QuickMenu } = require('../pages/quickMenu')
+const { SuppliersPage } = require('../pages/suppliersPage')
+
+test.use({
+  ...devices['iPhone SE']
+});
+
+test('Supplier Full Flow', async ({ page }) => {
+
+  const loginPage = new LoginPage(page)
+
+  const quickMenu = new QuickMenu(page)
+
+  const suppliersPage = new SuppliersPage(page)
+
+    console.log(Object.getOwnPropertyNames(Object.getPrototypeOf(suppliersPage)))
+
+
+  await loginPage.setupOtpHandler()
+
+  await loginPage.goto()
+
+  await loginPage.login('+972 52 711 6967', '240220261')
+
+  await suppliersPage.goto()
+
+  await quickMenu.open()
+  await suppliersPage.downloadExcel()
+
+  await quickMenu.open()
+  await suppliersPage.uploadExcel('C:/Users/User/Downloads/suppliers (1).xlsx')
+
+  await quickMenu.open()
+  await suppliersPage.createSupplier()
+
+  await suppliersPage.approveSupplier()
+
+  await suppliersPage.rejectSupplier()
+  
+await page.pause()
+})

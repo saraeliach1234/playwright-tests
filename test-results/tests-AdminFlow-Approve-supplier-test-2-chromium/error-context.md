@@ -1,0 +1,69 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e4]:
+      - generic [ref=e6]:  
+      - generic [ref=e12]:
+        - generic [ref=e13]:
+          - generic [ref=e14]:
+            - link "Logo" [ref=e15] [cursor=pointer]:
+              - /url: /dashboard
+              - img "Logo" [ref=e16]
+            - generic [ref=e18] [cursor=pointer]:
+              - generic [ref=e19]: 
+              - generic: 
+          - generic [ref=e23]: loading...
+          - link "Up Capital Web Site" [ref=e25] [cursor=pointer]:
+            - /url: https://upcapital.io/
+            - generic [ref=e26]: Up Capital Web Site
+        - generic [ref=e27]:
+          - generic [ref=e31]:
+            - generic [ref=e32]:
+              - generic [ref=e33]:
+                - heading "רשימת ספקים" [level=3] [ref=e34]:
+                  - generic [ref=e35]: רשימת ספקים
+                - generic [ref=e36]:
+                  - generic [ref=e37]:
+                    - generic [ref=e38]: 
+                    - generic: 
+                  - textbox "חיפוש" [ref=e39]
+                - button " תצוגות מוגדרות מראש" [ref=e41] [cursor=pointer]:
+                  - generic [ref=e42]: 
+                  - text: תצוגות מוגדרות מראש
+              - generic [ref=e44]:
+                - button "" [ref=e45] [cursor=pointer]:
+                  - generic [ref=e46]: 
+                - button "Help" [ref=e47] [cursor=pointer]: "?"
+                - text:    
+            - table [ref=e54]:
+              - rowgroup [ref=e66]:
+                - row "שם ספק מספר ספק סטטוס סכום החשבונית סה''כ חשבוניות סטטוס אישור upcapital ניכוי מס במקור % ספק מאושר תוקף ניכוי מס" [ref=e67]:
+                  - columnheader [ref=e68]
+                  - columnheader "שם ספק" [ref=e70]
+                  - columnheader "מספר ספק" [ref=e71]
+                  - columnheader "סטטוס" [ref=e72]
+                  - columnheader "סכום החשבונית" [ref=e73]
+                  - columnheader "סה''כ חשבוניות" [ref=e74]
+                  - columnheader "סטטוס אישור upcapital" [ref=e75]
+                  - columnheader "ניכוי מס במקור %" [ref=e76]
+                  - columnheader "ספק מאושר" [ref=e77]
+                  - columnheader "תוקף ניכוי מס" [ref=e78]
+              - rowgroup:
+                - row
+          - generic [ref=e80]:
+            - generic [ref=e81]:
+              - generic [ref=e82]: 2026©
+              - link "Up Capital" [ref=e83] [cursor=pointer]:
+                - /url: https://upcapital.io/
+            - list [ref=e84]:
+              - listitem [ref=e85]:
+                - link "About" [ref=e86] [cursor=pointer]:
+                  - /url: https://www.upcapital.io/about/
+              - listitem [ref=e87]:
+                - link "Support" [ref=e88] [cursor=pointer]:
+                  - /url: https://www.upcapital.io/contact-us
+    - text:                    
+  - img
+```
