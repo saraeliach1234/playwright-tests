@@ -1,7 +1,0 @@
-const { test, expect } = require('@playwright/test');
-//const { redirect } = require('next/dist/server/api-utils');
-
-await page.waitForURL('**/dashboard', { timeout: 60000 });
-    // 6. מעבר לעמוד חשבוניות המבוקש
-await page.goto('https://dashboard.upcapital.io/crafted/widgets/tables');
-    
