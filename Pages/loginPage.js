@@ -30,7 +30,7 @@ class LoginPage {
   }
 
   async goto() {
-    await this.page.goto('https://dashboard.upcapital.io/auth')
+    await this.page.goto(process.env.BASE_URL)
   
    await this.page.getByRole('textbox').first().waitFor();
   }
