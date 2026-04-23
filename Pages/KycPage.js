@@ -14,6 +14,7 @@ class KycPage {
     this.zip = this.getInput('מיקוד');
 
     this.checkboxTerms = page.getByRole('checkbox', { name: /תנאי השימוש/i });
+  
   }
 
   getInput(label) {
@@ -25,14 +26,19 @@ class KycPage {
   }
 
   async validateAddress() {
-    await expect(this.city).toHaveValue('תל אביב');
-    await expect(this.zip).toHaveValue('6100000');
+     const jsonPath = path.resolve(__dirname, '../data/kycData.json');
+  const data = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
+
+    await expect(this.city).toHaveValue(data.city);
+    await expect(this.zip).toHaveValue(data.zip);
   }
 
   async validateBankDetails() {
-    await expect(this.bankNumber).toHaveValue('12');
-    await expect(this.branchNumber).toHaveValue('888');
-    await expect(this.accountNumber).not.toBeEmpty();
+    const jsonPath = path.resolve(__dirname, '../data/kycData.json');
+  const data = JSON.parse(fs.readFileSync(jsonPath, 'utf-8'));
+    await expect(this.bankNumber).toHaveValue(data.bankNumber);
+    await expect(this.branchNumber).toHaveValue(data.branchNumber);
+    await expect(this.accountNumber).not.toBeEmpty(data.accountNumber);
   }
 
   async validateCheckbox() {
