@@ -45,7 +45,9 @@ async goto() {
 
     // אם המערכת זורקת אותנו ללוגין
     if (this.page.url().includes('/auth')) {
-      await this.login('0527116967', '240220261');
+       const phone = process.env.USER_PHONE;
+       const password = process.env.USER_PASS;
+       await this.login(phone, password);
     }
 
     await expect(this.page).toHaveURL(/tables/, { timeout: 15000 });
@@ -58,23 +60,7 @@ async open() {
   .filter({ has: this.page.locator('i.fa-ellipsis-vertical') })
   .click();
 }
-/*async writeToExell(filePath)
-  {
 
-    const wb = XLSX.readFile(filePath);
-const ws = wb.Sheets[wb.SheetNames[0]];
-
-ws['A2'] = { t: 's', v:'240220262'};
-ws['B2'] = { t: 's', v: 'c2343234568' };
-ws['C2'] = { t: 's', v:'v2402202629'};
-ws['D2'] = { t: 's', v:'2026-04-19'};
-ws['E2'] = {t:'s' , v:'2026-04-25'};
-ws['F2'] =  {t:'s' , v:'1500'};
-
-
-XLSX.writeFile(wb, filePath);
-
-  }*/
   async uploadExcel(filePath) {
     if (!filePath) throw new Error("Missing filePath for upload");
 

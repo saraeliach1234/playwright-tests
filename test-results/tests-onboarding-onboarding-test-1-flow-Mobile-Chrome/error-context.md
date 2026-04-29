@@ -1,0 +1,108 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e4]:
+      - generic [ref=e6]:
+        - generic "Show sidebar menu" [ref=e7]:
+          - generic [ref=e9] [cursor=pointer]:
+            - generic [ref=e10]: 
+            - generic: 
+          - generic:
+            - link:
+              - /url: /dashboard
+        - generic [ref=e13]:
+          - generic "Show header menu"
+      - generic [ref=e16]:
+        - generic [ref=e17]:
+          - text:  
+          - generic [ref=e20]:
+            - generic [ref=e22]: תפריט
+            - link "      חשבוניות להקדמה" [ref=e24] [cursor=pointer]:
+              - /url: /dashboard-suppliers
+              - generic [ref=e26]:
+                - generic [ref=e27]: 
+                - generic: 
+                - generic: 
+                - generic: 
+                - generic: 
+                - generic: 
+              - generic [ref=e28]: חשבוניות להקדמה
+            - link "  עסקאות" [ref=e30] [cursor=pointer]:
+              - /url: /dashboard-suppliers/deals
+              - generic [ref=e32]:
+                - generic [ref=e33]: 
+                - generic: 
+              - generic [ref=e34]: עסקאות
+            - link "   הרשם לזיהוי" [ref=e36] [cursor=pointer]:
+              - /url: /crafted/pages/register
+              - generic [ref=e38]:
+                - generic [ref=e39]: 
+                - generic: 
+                - generic: 
+              - generic [ref=e40]: הרשם לזיהוי
+          - link "Up Capital Web Site" [ref=e42] [cursor=pointer]:
+            - /url: https://upcapital.io/
+            - generic [ref=e43]: Up Capital Web Site
+        - generic [ref=e48]:
+          - generic [ref=e49]:
+            - button "חזרה" [ref=e50] [cursor=pointer]:
+              - generic [ref=e51]: 
+            - generic [ref=e52]: משלים רישום עבור
+            - combobox [ref=e53]:
+              - option "לקוח שרה טסט" [selected]
+          - generic [ref=e54]:
+            - main [ref=e55]:
+              - generic [ref=e57]:
+                - generic [ref=e58]: שאלונים
+                - generic [ref=e59]: שלב 4 מתוך 5
+              - generic [ref=e62]:
+                - generic [ref=e64]:
+                  - strong [ref=e65]: סעיף 1 / 8
+                  - generic [ref=e66]: 13%
+                - generic [ref=e72]:
+                  - generic [ref=e73]:
+                    - generic [ref=e74]: אפ קפיטל פיננסים ישראל בע"מ
+                    - generic [ref=e75]: "משרד: הרוקמים 26, חולון 5885849 | טלפון: 073-7801153 | contact@upcapital.io"
+                  - generic [ref=e76]:
+                    - generic [ref=e77]: שאלון הכר את הלקוח לעוסק מורשה (8 סעיפים)
+                    - generic [ref=e78]: הטופס מיועד למילוי בידי בעל העסק (העוסק המורשה) בלבד.
+                  - generic [ref=e79]:
+                    - heading "1. פרטים אישיים" [level=2] [ref=e80]
+                    - generic [ref=e81]:
+                      - generic [ref=e82]:
+                        - generic [ref=e83]:
+                          - generic [ref=e84]: שם מלא
+                          - textbox [ref=e85]: שרה ישראלי
+                        - generic [ref=e86]:
+                          - generic [ref=e87]: מספר זהות
+                          - textbox [ref=e88]: "123456789"
+                      - generic [ref=e89]:
+                        - generic [ref=e90]:
+                          - generic [ref=e91]: מגדר (ז/נ)
+                          - generic [ref=e92]:
+                            - generic [ref=e93]:
+                              - radio "ז" [ref=e94]
+                              - text: ז
+                            - generic [ref=e95]:
+                              - radio "נ" [checked] [active] [ref=e96]
+                              - text: נ
+                        - generic [ref=e97]:
+                          - generic [ref=e98]: תאריך לידה
+                          - textbox [ref=e99]:
+                            - /placeholder: dd/mm/yyyy
+                            - text: 1990-01-01
+                        - generic [ref=e100]:
+                          - generic [ref=e101]: מדינת אזרחות
+                          - textbox [ref=e102]: ישראלית
+                      - generic [ref=e104]:
+                        - generic [ref=e105]: כתובת
+                        - textbox [ref=e106]: תל אביב
+                - generic [ref=e108]:
+                  - button "הקודם" [disabled]
+                  - button "המשך" [ref=e109] [cursor=pointer]
+            - button "אעשה זאת מאוחר יותר" [ref=e112] [cursor=pointer]
+    - text:                    
+  - img
+```

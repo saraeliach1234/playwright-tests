@@ -28,6 +28,7 @@ test('Supplier Full Flow', async ({ page }) => {
  const filePath= await suppliersPage.downloadExcel();
   
  const myData= await suppliersPage.writeToExell(filePath);
+ 
   // העלאת האקסל שזה עתה הורד
 const path = require('path');
 
@@ -39,13 +40,16 @@ const newFilePath = path.resolve(
 await quickMenu.open();
 await suppliersPage.uploadExcel(filePath);
  
-console.log(myData);
+//console.log(myData);
   // יצירת ספק ופעולות אישור/דחייה
  /*await quickMenu.open();
   await suppliersPage.createSupplier();*/
 
   // פעולות על הטבלה (כאן כנראה לא צריך quickMenu כי הטבלה כבר גלויה)
-  await suppliersPage.approveSupplier(myData);
+  for (const name of myData) {
+  await suppliersPage.approveSupplier(name);
+}
+  
  // await suppliersPage.rejectSupplier();
 
    await page.pause(); // מצוין לניטור התוצאות בסיום

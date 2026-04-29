@@ -38,43 +38,58 @@ class SuppliersPage {
   }
  
 async getSupplierData() {
-    const filePath = path.resolve(__dirname, '../data/supplierData.json');
+    const filePath = path.resolve(__dirname, '../data/supplier.json');
     return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+
+    
   }
 
-  async writeToExell(filePath) {
+async writeToExell(filePath) {
+  const suppliersData = await this.getSupplierData();
 
-    const data = await this.getSupplierData();
+  const suppliers = Array.isArray(suppliersData)
+    ? suppliersData
+    : suppliersData.suppliers || [suppliersData];
 
-    // טוענים את האקסל
-    const wb = XLSX.readFile(filePath);
-    const ws = wb.Sheets[wb.SheetNames[0]];
+  const wb = XLSX.readFile(filePath);
+  const ws = wb.Sheets[wb.SheetNames[0]];
 
-    // מיפוי מסודר (לא Object.values!)
-    const cellsMap = [
-      data.Name,
-      data.WHT_Identifier,
-      data.WHT_DeductionPercent,
-      data.WHT_DeductionDate,
-      data.Contact_FirstName,
-      data.Contact_LastName,
-      data.Contact_PhoneNumber,
-      data.Contact_Email,
-      data.Bank_Name,
-      data.Bank_AccountNumber,
-      data.Bank_BranchNumber
+  const startRow = 2;
+
+  suppliers.forEach((supplier, index) => {
+    const row = startRow + index;
+
+    const rowData = [
+      supplier.Name,
+      supplier.WHT_Identifier,
+      supplier.WHT_DeductionPercent,
+      supplier.WHT_DeductionDate,
+      supplier.Contact_FirstName,
+      supplier.Contact_LastName,
+      supplier.Contact_PhoneNumber,
+      supplier.Contact_Email,
+      supplier.Bank_Name,
+      supplier.Bank_AccountNumber,
+      supplier.Bank_BranchNumber
     ];
 
-    const cells = ['A2','B2','C2','D2','E2','F2','G2','H2','I2','J2','K2'];
+    const columns = ['A','B','C','D','E','F','G','H','I','J','K'];
 
-    cells.forEach((cell, i) => {
-      ws[cell] = { t: 's', v: cellsMap[i] };
-      
+    columns.forEach((col, i) => {
+      const value = rowData[i];
+
+      ws[`${col}${row}`] = {
+        t: typeof value === 'number' ? 'n' : 's',
+        v: value ?? ''
+      };
     });
+  });
 
-    XLSX.writeFile(wb, filePath);
-    return cellsMap[0];
+  XLSX.writeFile(wb, filePath);
+return suppliers.map(s => s.Name);
   }
+
+  
  
   async uploadExcel(filePath) {
     if (!filePath) throw new Error("Missing filePath for upload");
